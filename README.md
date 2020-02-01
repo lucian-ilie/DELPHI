@@ -22,12 +22,12 @@ All datasets used in the paper can be downloaded at https://www.csd.uwo.ca/~ilie
 Src directory contains source files for training and predicting. All program options can be seen by typing 
 ```
 python train.py
-python predic.py
+python predict.py
 ```
 Two scripts `run_training.sh` and `run_predicting.sh` are included as an example of how to run the programs.
 
 2. `Saved_Model`
-Saved_model dir contains the keras model of the final ensemble model.
+Saved_model dir contains the keras model of the CNN, RNN, and the final ensemble model.
 
 3. `Feature_Computation`
 Feature_Computation contains programs and script piplines for computing each script. 
