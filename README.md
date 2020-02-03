@@ -2,7 +2,7 @@
 Deep learning protein-protein binding sites prediction
 
 ## Citation
-Li, Yiwei and Ilie, Lucian, DELPHI: accurate deep ensemble model for protein interaction sites prediction. bioRxiv.
+Li, Yiwei and Ilie, Lucian, DELPHI: accurate deep ensemble model for protein interaction sites prediction. [bioRxiv] (https://www.biorxiv.org/content/10.1101/2020.01.31.929570v1)
 
 ##
 Contact: 
