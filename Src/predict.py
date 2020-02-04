@@ -27,7 +27,7 @@ import math
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras import optimizers
 
-from Many2One_BiLSTM import CalculateEvaluationMetrics, get_array_of_float_from_a_line, get_array_of_int_from_a_line, Split1Dlist2NpArrays, Split2DList2NpArrays, PlotRocAndPRCurvesAndMetrics, Split2DNp3DNp, SplitPro2Vec2NpArrays, Convert2DListTo3DNp, PrintToCSV, MakeDir, PlotAccLossCurves, CountLabelIn2DList,log_time, get_3mer_and_np100vec_from_a_line, LoadProtVec3Grams, GetProVecFeature, CheckDiff, CheckTrainAndTestDataSet, Read1DFeature, PreparePro2Vec, ReadNDFeature, LoadFeatures, SplitPro2Vec, LoadLabelsAndFormatFeatures, Build_ND_DB, Build_1D_DB
+from train import CalculateEvaluationMetrics, get_array_of_float_from_a_line, get_array_of_int_from_a_line, Split1Dlist2NpArrays, Split2DList2NpArrays, PlotRocAndPRCurvesAndMetrics, Split2DNp3DNp, SplitPro2Vec2NpArrays, Convert2DListTo3DNp, PrintToCSV, MakeDir, PlotAccLossCurves, CountLabelIn2DList,log_time, get_3mer_and_np100vec_from_a_line, LoadProtVec3Grams, GetProVecFeature, CheckDiff, CheckTrainAndTestDataSet, Read1DFeature, PreparePro2Vec, ReadNDFeature, LoadFeatures, SplitPro2Vec, LoadLabelsAndFormatFeatures, Build_ND_DB, Build_1D_DB
 
 def Predict(args, test_all_features_np3D, test_label_np_2D ):
     log_time("in TrainModel")
