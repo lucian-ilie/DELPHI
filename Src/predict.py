@@ -10,6 +10,7 @@ import datetime
 from keras.models import Sequential, load_model
 from keras.layers import LSTM, Dense, Flatten, Reshape, TimeDistributed, Bidirectional, CuDNNLSTM, Dropout
 from keras.preprocessing.sequence import pad_sequences
+from keras_self_attention import SeqSelfAttention
 import matplotlib
 
 matplotlib.use('pdf')
@@ -27,16 +28,16 @@ import math
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras import optimizers
 
-from train import CalculateEvaluationMetrics, get_array_of_float_from_a_line, get_array_of_int_from_a_line, Split1Dlist2NpArrays, Split2DList2NpArrays, PlotRocAndPRCurvesAndMetrics, Split2DNp3DNp, SplitPro2Vec2NpArrays, Convert2DListTo3DNp, PrintToCSV, MakeDir, PlotAccLossCurves, CountLabelIn2DList,log_time, get_3mer_and_np100vec_from_a_line, LoadProtVec3Grams, GetProVecFeature, CheckDiff, CheckTrainAndTestDataSet, Read1DFeature, PreparePro2Vec, ReadNDFeature, LoadFeatures, SplitPro2Vec, LoadLabelsAndFormatFeatures, Build_ND_DB, Build_1D_DB
+from Many2One_BiLSTM import CalculateEvaluationMetrics, get_array_of_float_from_a_line, get_array_of_int_from_a_line, Split1Dlist2NpArrays, Split2DList2NpArrays, PlotRocAndPRCurvesAndMetrics, Split2DNp3DNp, SplitPro2Vec2NpArrays, Convert2DListTo3DNp, PrintToCSV, MakeDir, PlotAccLossCurves, CountLabelIn2DList,log_time, get_3mer_and_np100vec_from_a_line, LoadProtVec3Grams, GetProVecFeature, CheckDiff, CheckTrainAndTestDataSet, Read1DFeature, PreparePro2Vec, ReadNDFeature, LoadFeatures, SplitPro2Vec, LoadLabelsAndFormatFeatures, Build_ND_DB, Build_1D_DB
 
-def Predict(args, test_all_features_np3D, test_label_np_2D ):
+def Predict(args, test_all_features_np3D, test_label_np_2D, test_pro2vec_embedding_np3D):
     log_time("in TrainModel")
 
     cur_time = time.time()
     cur_time_formatted = datetime.datetime.fromtimestamp(cur_time).strftime('%Y-%m-%d-%H-%M-%S')
     tensorboard = TensorBoard(log_dir="tensorboard_log/{}".format(args.prefix))
 
-    model = load_model(args.model_path)
+    model = load_model(args.model_path, custom_objects=SeqSelfAttention.get_custom_objects())
     # es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=10, restore_best_weights=True)
     # mc = ModelCheckpoint("savedModel/" + args.prefix + "/" + "best_model.h5", monitor='val_loss', mode='min',
     #                      verbose=1, save_best_only=True)
@@ -53,8 +54,9 @@ def Predict(args, test_all_features_np3D, test_label_np_2D ):
     #     PlotRocAndPRCurvesAndMetrics(validation_label_np.ravel(), y_pred_testing.ravel(), args, "validation_ep"+str(args.epochs)+"_")
 
     y_pred_testing = model.predict(test_all_features_np3D, batch_size=args.batch_size).ravel()
-    np.save("/home/j00492398/test_joey/interface-pred/workspace/plot_ROC_PR/DELPHI_label_"+args.testing_dataset_prefix+".npy", test_label_np_2D.ravel())
-    np.save("/home/j00492398/test_joey/interface-pred/workspace/plot_ROC_PR/DELPHI_value_"+args.testing_dataset_prefix+".npy", y_pred_testing.ravel())
+    #for plotting PR and ROC curves
+    # np.save("/home/j00492398/test_joey/interface-pred/workspace/plot_ROC_PR/DELPHI_label_"+args.testing_dataset_prefix+".npy", test_label_np_2D.ravel())
+    # np.save("/home/j00492398/test_joey/interface-pred/workspace/plot_ROC_PR/DELPHI_value_"+args.testing_dataset_prefix+".npy", y_pred_testing.ravel())
 
     PlotRocAndPRCurvesAndMetrics(test_label_np_2D.ravel(), y_pred_testing.ravel(), args, args.testing_dataset_prefix + "_ep"+str(args.epochs)+"_")
     del model
@@ -89,6 +91,12 @@ def GetProgramArguments():
 
     # optional arguments
     optional = parser.add_argument_group('optional arguments')
+    optional.add_argument('-ed', '--emb_dim', type=int, default=40,
+                          help='int, embedding out dimension')
+    optional.add_argument('-atte', '--attention', type=int, default=64,
+                          help='int, attention unit numbers attention layer')
+    optional.add_argument('-dn', '--dense', type=int, default=64,
+                          help='int, dense unit numbers in the ensemble model')
     optional.add_argument('-lr', '--learning_rate', type=float, default=0.001,
                           help='float: learning rate')
     optional.add_argument('-do', '--drop_out', type=float, default=0.7,
@@ -144,11 +152,11 @@ def main():
     print("program arguments are: ", args)
     LoadFeatures(args)
     # train_all_features_np3D, train_label_np_2D = LoadLabelsAndFormatFeatures(args, args.training_protein_fn, True)
-    test_all_features_np3D, test_label_np_2D = LoadLabelsAndFormatFeatures(args, args.testing_protein_fn, False)
+    test_all_features_np3D, test_label_np_2D, test_pro2vec_embedding_np3D = LoadLabelsAndFormatFeatures(args, args.testing_protein_fn, False)
 
     # exit(1)
     # print("Dict_3mer_to_100vec size: ", len(Dict_3mer_to_100vec))
-    Predict(args, test_all_features_np3D, test_label_np_2D)
+    Predict(args, test_all_features_np3D, test_label_np_2D, test_pro2vec_embedding_np3D)
     log_time("Program ended")
 
 
@@ -164,6 +172,7 @@ RAA_DB = Build_1D_DB("RAA")
 RSA_DB = Build_1D_DB("RSA")
 Anchor_DB = Build_1D_DB("Anchor")
 Pro2Vec_1D_DB = Build_1D_DB("Pro2Vec_1D")
+Pro2Vec_embedding_DB = Build_1D_DB("Pro2Vec_embedding_1D")
 HSP_DB = Build_1D_DB("HSP")
 
 PHY_Char_DB_1 = Build_ND_DB("PHY_Char", 1)
@@ -185,6 +194,8 @@ RSA_train_dic = {}
 RSA_test_dic = {}
 Pro2Vec_1D_train_dic = {}
 Pro2Vec_1D_test_dic = {}
+Pro2Vec_embedding_train_dic = {}
+Pro2Vec_embedding_test_dic = {}
 HSP_train_dic = {}
 HSP_test_dic = {}
 Anchor_train_dic = {}
