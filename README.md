@@ -54,6 +54,6 @@ mkdir -p ../programs && cd ../program
 ```
 
 # DELPHI model architecture 
-![](img/Model_architecture.jpg)
+![](img/Model_architecture.png)
 
-![](img/many_2_one.jpg)
+![](img/many_2_one.png)
