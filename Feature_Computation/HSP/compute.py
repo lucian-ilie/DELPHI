@@ -1,37 +1,10 @@
-
-################################################
-# fix the random see value so the results are re-producible
 from Bio.SubsMat import MatrixInfo as matlist
-seed_value = 7
 import os
-# 3. Set `numpy` pseudo-random generator at a fixed value
 import numpy as np
-
-np.random.seed(seed_value)
-###############################################
-
-import csv
-import logging
-import datetime
-from keras.models import Sequential
-from keras.layers import LSTM, Dense, Flatten, Reshape, TimeDistributed, Bidirectional, CuDNNLSTM, Dropout
-from keras.preprocessing.sequence import pad_sequences
-import matplotlib
-
-matplotlib.use('pdf')
-import matplotlib.pyplot as plt
 from pandas import DataFrame
-from tensorflow.python.keras.callbacks import TensorBoard
 import time
 import sys
-from sklearn.metrics import roc_curve, auc, precision_recall_curve
-from sklearn.model_selection import StratifiedKFold, KFold
-from sklearn.utils import class_weight
-from itertools import chain
-import argparse
 import math
-from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras import optimizers
 
 PAM120 = matlist.pam120
 train_pid_2_seq = {}
@@ -39,9 +12,6 @@ train_pid_2_label = {}
 target_pid_2_seq = {}
 target_pid_2_score = {}
 
-def print_dic(dic):
-    for key in dic:
-        print(key,": ",dic[key])
 def ReadTrain(train_fn):
     # pid, seq, label
     fin = open(train_fn, "r")
@@ -54,12 +24,6 @@ def ReadTrain(train_fn):
         train_pid_2_seq[line_Pid] = line_Pseq
         train_pid_2_label[line_Pid] = line_label
     fin.close()
-
-    # print("train_pid_2_seq in readTrain")
-    # print_dic(train_pid_2_seq)
-    # print("train_pid_2_label in readTrain")
-    # print_dic(train_pid_2_label)
-
 
 def ReadTarget(target_fn):
     # pid, seq
@@ -77,7 +41,7 @@ def ReadTarget(target_fn):
 def ReadHSP(HSP_fn, target_fn, out_fn):
     # > p1 and p2
     # sta1 sta2 length
-    max_value = 0
+    max_value = 468
     fin = open(HSP_fn, "r")
     p_train = ""
     p_target = ""
@@ -121,23 +85,24 @@ def ReadHSP(HSP_fn, target_fn, out_fn):
                 for i in range(hsp_length):
                     position_train = sta_train + i
                     position_target = sta_target + i
-                    if (train_pid_2_label[p_train][position_train] == "1"):
-                        # print("is 1")
-                        # print("score: ", PAM120[(
-                        #         train_pid_2_seq[p_train][position_train],
-                        #         target_pid_2_seq[p_target][position_target])])
-                        # add score if similar, don't deduct score
-                        if((train_pid_2_seq[p_train][position_train],target_pid_2_seq[p_target][position_target]) in PAM120):
-                            score = PAM120[(
-                                train_pid_2_seq[p_train][position_train],
-                                target_pid_2_seq[p_target][position_target])]
-                        else:
-                            score = PAM120[(
-                                target_pid_2_seq[p_target][position_target],
-                                train_pid_2_seq[p_train][position_train])]
-                        target_pid_2_score[p_target][position_target] = max(score, 0) + target_pid_2_score[p_target][position_target]
-                        max_value = max(max_value, target_pid_2_score[p_target][position_target])
-    print("max value: ",max_value)
+                    if ((position_train < len(train_pid_2_label[p_train])) and (position_target < len(target_pid_2_seq[p_target])) and (train_pid_2_seq[p_train][position_train] != 'U') and (target_pid_2_seq[p_target][position_target] != 'U')):
+                        if (train_pid_2_label[p_train][position_train] == "1"):
+                            # print("is 1")
+                            # print("score: ", PAM120[(
+                            #         train_pid_2_seq[p_train][position_train],
+                            #         target_pid_2_seq[p_target][position_target])])
+                            # add score if similar, don't deduct score
+                            if((train_pid_2_seq[p_train][position_train],target_pid_2_seq[p_target][position_target]) in PAM120):
+                                score = PAM120[(
+                                    train_pid_2_seq[p_train][position_train],
+                                    target_pid_2_seq[p_target][position_target])]
+                            else:
+                                score = PAM120[(
+                                    target_pid_2_seq[p_target][position_target],
+                                    train_pid_2_seq[p_train][position_train])]
+                            target_pid_2_score[p_target][position_target] = max(score, 0) + target_pid_2_score[p_target][position_target]
+                            # max_value = max(max_value, target_pid_2_score[p_target][position_target])
+        # print("max value: ",max_value)
     fin.close()
 
     #normalize
@@ -165,7 +130,7 @@ def ReadHSP(HSP_fn, target_fn, out_fn):
 
 
 def main():
-    print("start")
+    # print("start")
     train_fn = sys.argv[1] # train fasta with label
     target_fn = sys.argv[2] # target fasta file. Produce the HSP feature of this file
     HSP_fn = sys.argv[3] # HSP file name. the HSP file contains all HSPs involving train and target proteins. No self HSP is included
@@ -173,7 +138,7 @@ def main():
     ReadTrain(train_fn)
     ReadTarget(target_fn)
     ReadHSP(HSP_fn, target_fn, out_fn)
-    print("end")
+    # print("end")
 
 if __name__ == '__main__':
     main()

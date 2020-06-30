@@ -1,36 +1,6 @@
-
-################################################
-# fix the random see value so the results are re-producible
-seed_value = 7
 import os
-# 3. Set `numpy` pseudo-random generator at a fixed value
 import numpy as np
-
-np.random.seed(seed_value)
-###############################################
-
-import csv
-import logging
-import datetime
-from keras.models import Sequential
-from keras.layers import LSTM, Dense, Flatten, Reshape, TimeDistributed, Bidirectional, CuDNNLSTM, Dropout
-from keras.preprocessing.sequence import pad_sequences
-import matplotlib
-
-matplotlib.use('pdf')
-import matplotlib.pyplot as plt
-from pandas import DataFrame
-from tensorflow.python.keras.callbacks import TensorBoard
-import time
 import sys
-from sklearn.metrics import roc_curve, auc, precision_recall_curve
-from sklearn.model_selection import StratifiedKFold, KFold
-from sklearn.utils import class_weight
-from itertools import chain
-import argparse
-import math
-from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras import optimizers
 
 def RetriveFeatureFromASequence(seq):
     seq = seq.rstrip('\n').rstrip(' ')

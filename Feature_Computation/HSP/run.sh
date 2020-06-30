@@ -1,5 +1,5 @@
 #!/bin/bash
-compute="python /home/j00492398/test_joey/interface-pred/workspace/compute_feature_dictionary/HSP/compute.py"
+compute="python3 /home/j00492398/test_joey/interface-pred/workspace/compute_feature_dictionary/HSP/compute.py"
 train_fn="/home/j00492398/test_joey/interface-pred/Dataset/survey/survey_train_nonRed_Pid_and_Pseq_label.txt"
 #target_fn="/home/j00492398/test_joey/interface-pred/workspace/compute_feature_dictionary/HSP/test_target.txt"
 hsp="/home/j00492398/test_joey/interface-pred/Dataset/72_164_186_SCRIBER_test_survey_train_Pid_and_Pseq.HSP"

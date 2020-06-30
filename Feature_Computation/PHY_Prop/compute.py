@@ -1,41 +1,16 @@
-
-################################################
-# fix the random see value so the results are re-producible
-seed_value = 7
 import os
-# 3. Set `numpy` pseudo-random generator at a fixed value
 import numpy as np
-
-np.random.seed(seed_value)
-###############################################
-
-import csv
-import logging
-import datetime
-import matplotlib
-
-matplotlib.use('pdf')
-import matplotlib.pyplot as plt
-from pandas import DataFrame
-
-import time
 import sys
-from sklearn.metrics import roc_curve, auc, precision_recall_curve
-from sklearn.model_selection import StratifiedKFold, KFold
-from sklearn.utils import class_weight
-from itertools import chain
-import argparse
 import math
-
 
 def BuildFeatureDictionary(feature_np_1D):
     Feature_table = feature_np_1D
     max_Feature = np.amax(Feature_table)
     min_Feature = np.amin(Feature_table)
-    print("max_Feature: ", max_Feature)
-    print("min_Feature: ", min_Feature)
+    # print("max_Feature: ", max_Feature)
+    # print("min_Feature: ", min_Feature)
     normolized_Feature_table = (Feature_table - min_Feature) / (max_Feature - min_Feature)
-    print("normalized_Feature_table: ", normolized_Feature_table)
+    # print("normalized_Feature_table: ", normolized_Feature_table)
 
     Feature_dict = {}
     Feature_dict['A'] = normolized_Feature_table[0]
@@ -146,12 +121,8 @@ def main():
 
     for i in range(len(features)):
         Feature_dict = BuildFeatureDictionary(features[i])
-        out_fn = sys.argv[2] + "_" + str(i+1) + ".txt"
+        out_fn = sys.argv[2] + str(i+1) + ".txt"
         load_fasta_and_compute(seq_fn, out_fn, Feature_dict)
-
-
-
-
 
 
 if __name__ == '__main__':

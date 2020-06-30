@@ -29,6 +29,8 @@ T =0.05500
 V =0.07200
 W =0.01400
 Y =0.03400
+X =1
+U =1
 
 background  = [C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y,A]
 
@@ -53,7 +55,9 @@ backgrounddict ={
 'T' : 0.05500,
 'V' : 0.07200,
 'W' : 0.01400,
-'Y' : 0.03400
+'Y' : 0.03400,
+'X' : 1,
+'U' : 1
 }
 
 def readBlosumMatrix(path) :
@@ -339,7 +343,6 @@ def processFiles(path,fastaPath,mainFile,errorFile,featureOutFile) :
     errorFile.close()
 def main():
     #out="/Users/sabby/Documents/ECO/out"
-    out="/home/j00492398/test_joey/interface-pred/workspace/compute_feature_dictionary/ECO"
 
     #fastaPath= "/Users/sabby/Documents/ECO/filesBck"
     #fastaPath="/home/saby2k13/ECO/filesBck"
@@ -351,7 +354,7 @@ def main():
     #hallmarkPath = "/Users/sabby/Documents/ECO/hallmarks/ECOFiles"
     #hallmarkPath = "/home/saby2k13/ECO/hallmarks/ECOFiles"
 
-    errLoc = out+"/errorlogfile.txt"
+    errLoc = "errorlogfile.txt"
     fLoc = sys.argv[3]
     #statsLoc = out+"/stats.txt"
 

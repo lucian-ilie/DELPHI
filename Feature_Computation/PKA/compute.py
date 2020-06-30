@@ -1,46 +1,16 @@
-
-################################################
-# fix the random see value so the results are re-producible
-seed_value = 7
 import os
-# 3. Set `numpy` pseudo-random generator at a fixed value
 import numpy as np
-
-np.random.seed(seed_value)
-###############################################
-
-import csv
-import logging
-import datetime
-from keras.models import Sequential
-from keras.layers import LSTM, Dense, Flatten, Reshape, TimeDistributed, Bidirectional, CuDNNLSTM, Dropout
-from keras.preprocessing.sequence import pad_sequences
-import matplotlib
-
-matplotlib.use('pdf')
-import matplotlib.pyplot as plt
-from pandas import DataFrame
-from tensorflow.python.keras.callbacks import TensorBoard
-import time
 import sys
-from sklearn.metrics import roc_curve, auc, precision_recall_curve
-from sklearn.model_selection import StratifiedKFold, KFold
-from sklearn.utils import class_weight
-from itertools import chain
-import argparse
-import math
-from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras import optimizers
 
 def BuildFeatureDictionary():
     Feature_table = np.array([7.00, 7.00, 3.65, 3.22, 7.00, 7.00, 6.00, 7.00, 10.53, 7.00,
                               7.00, 8.18, 7.00, 7.00, 12.48, 7.00, 7.00, 7.00, 7.00, 10.07, 7.0])
     max_Feature = np.amax(Feature_table)
     min_Feature = np.amin(Feature_table)
-    print("max_Feature: ", max_Feature)
-    print("min_Feature: ", min_Feature)
+    # print("max_Feature: ", max_Feature)
+    # print("min_Feature: ", min_Feature)
     normolized_Feature_table = (Feature_table - min_Feature) / (max_Feature - min_Feature)
-    print("normalized_Feature_table: ", normolized_Feature_table)
+    # print("normalized_Feature_table: ", normolized_Feature_table)
     # normalized_Feature_table:
     # 0.40820734 0.40820734 0.04643629 0.         0.40820734 0.40820734
     #  0.30021598 0.40820734 0.78941685 0.40820734 0.40820734 0.53563715

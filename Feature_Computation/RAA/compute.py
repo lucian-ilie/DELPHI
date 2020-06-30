@@ -1,36 +1,5 @@
-
-################################################
-# fix the random see value so the results are re-producible
-seed_value = 7
-import os
-# 3. Set `numpy` pseudo-random generator at a fixed value
 import numpy as np
-
-np.random.seed(seed_value)
-###############################################
-
-import csv
-import logging
-import datetime
-from keras.models import Sequential
-from keras.layers import LSTM, Dense, Flatten, Reshape, TimeDistributed, Bidirectional, CuDNNLSTM, Dropout
-from keras.preprocessing.sequence import pad_sequences
-import matplotlib
-
-matplotlib.use('pdf')
-import matplotlib.pyplot as plt
-from pandas import DataFrame
-from tensorflow.python.keras.callbacks import TensorBoard
-import time
 import sys
-from sklearn.metrics import roc_curve, auc, precision_recall_curve
-from sklearn.model_selection import StratifiedKFold, KFold
-from sklearn.utils import class_weight
-from itertools import chain
-import argparse
-import math
-from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras import optimizers
 
 def BuildRAADictionary():
     RAA_table = np.array(
@@ -38,10 +7,10 @@ def BuildRAADictionary():
          0.61, -0.38, 0.92, 1.18, -0.17, -0.13, -0.07, 0.95, 0.71, 0.37])
     max_RAA = np.amax(RAA_table)
     min_RAA = np.amin(RAA_table)
-    print("max_RAA: ", max_RAA)
-    print("min_RAA: ", min_RAA)
+    # print("max_RAA: ", max_RAA)
+    # print("min_RAA: ", min_RAA)
     normolized_RAA_table = (RAA_table - min_RAA) / (max_RAA - min_RAA)
-    print("normalized_RAA_table: ", normolized_RAA_table)
+    # print("normalized_RAA_table: ", normolized_RAA_table)
     # normalized_RAA_table:
     # [0.19230769 0.32051282 0.1474359  0.03205128 0.73076923 0.17307692 0.02564103 0.08333333 0.35897436 0.69871795
     # 0.63461538 0. 0.83333333 1. 0.13461538 0.16025641 0.19871795 0.8525641 0.69871795 0.48076923]
@@ -70,8 +39,6 @@ def BuildRAADictionary():
 
     return RAA_dict
 
-
-
 def GetRAA(AA, RAA_dict):
     if (AA not in RAA_dict):
         print("[warning]: RAA_dict can't find ", AA, ". Returning 0")
@@ -86,7 +53,6 @@ def RetriveRAAFromASequence(seq, RAA_dict):
     for index, item in enumerate(seq):
         raa.append(GetRAA(item, RAA_dict))
     return raa
-
 
 def load_fasta_and_compute(seq_fn, out_fn, RAA_dict):
     fin = open(seq_fn, "r")

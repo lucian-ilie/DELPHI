@@ -1,38 +1,50 @@
-# DELPHI
-Deep learning protein-protein binding sites prediction
+# The source code of DELPHI web server
+The DELPHI source code is designed for high-throughput prediction. It does not have the limitation of 10 sequences per run. We recommend to use the [web version](https://www.csd.uwo.ca/~yli922/index.php) of DELPHI if you input is small.
+# system requirement
+DELPHI is developed under Linux environment with python 3.5.
+Recommended RAM: > 24GB. The RAM requirement mainly depends on the length of the input sequence. 
 
-## Citation
-Li, Yiwei and Ilie, Lucian, DELPHI: accurate deep ensemble model for protein interaction sites prediction. [bioRxiv] (https://www.biorxiv.org/content/10.1101/2020.01.31.929570v1)
-
-##
-Contact: 
-Yiwei Li (yli922@uwo.ca)
-
-Lucian Ilie (ilie@uwo.ca)
-## Installation
-The python (3.6) virtural enviroment wiht pip3 is highly recommended. All required python packages are listed in requirement'txt. The following pip command will install all of them at once.
+# installation
+1. clone the source code of DELPHI
 ```
-pip install -r requirement.txt
+mkdir -p Src && cd Src
+git clone [DELPHI git link]
 ```
-## Datasets
-All datasets used in the paper can be downloaded at https://www.csd.uwo.ca/~ilie/DELPHI/
+2. install python packages. Python virtual environment or conda is recommended for package management.
 
-## Directory explaination 
-1. `Src` 
-Src directory contains source files for training and predicting. All program options can be seen by typing 
+``` 
+For GPU version:
+pip3 install -r requirement_gpu.txt
 ```
-python train.py
-python predict.py
+
 ```
-Two scripts `run_training.sh` and `run_predicting.sh` are included as an example of how to run the programs.
+For CPU version: 
+pip3 install -r requirement_cpu.txt
+```
 
-2. `Saved_Model`
-Saved_model dir contains the keras model of the CNN, RNN, and the final ensemble model.
+3. install dependencies
 
-3. `Feature_Computation`
-Feature_Computation contains programs and script piplines for computing each script. 
+```
+create a program directory
+mkdir -p ../programs && cd ../program
+```
 
-## DELPHI model architecture 
-![](img/Model_architecture.jpg)
-
-![](img/many_2_one.jpg)
+ - install [SPRINT](https://github.com/lucian-ilie/SPRINT)
+ ```
+ git clone git@github.com:yiweili/DELPHI_web_server.git
+ git checkout DELPHI_Server
+ make compute_HSPs_parallel
+ ```
+ 
+ - install psiblast: 2.6.0+ and download the corresponding nr database. The database is large. You computing cluster should probaly already have a local copy of it.
+ ```
+ For Ubuntu:
+ sudo apt-get install ncbi-blast+
+```
+ 
+ - intall [hh-suite](https://github.com/soedinglab/hh-suite). The [database](http://wwwuser.gwdg.de/~compbiol/data/hhsuite/databases/hhsuite_dbs/old-releases/) used in DELPHI is uniprot20_2015_06.
+ 
+ - intall [GENN+ASAquick](http://mamiris.com/software.html)
+ 
+ - install [ANCHOR](http://anchor.elte.hu/Downloads.php)
+ 

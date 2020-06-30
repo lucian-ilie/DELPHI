@@ -1,31 +1,11 @@
 import operator
-################################################
-# fix the random see value so the results are re-producible
-seed_value = 7
 import os
-# 3. Set `numpy` pseudo-random generator at a fixed value
 import numpy as np
-
-np.random.seed(seed_value)
-###############################################
-
-import csv
-import logging
-import datetime
-import matplotlib
-
-matplotlib.use('pdf')
-import matplotlib.pyplot as plt
-from pandas import DataFrame
-
 import time
 import sys
-from sklearn.metrics import roc_curve, auc, precision_recall_curve
-from sklearn.model_selection import StratifiedKFold, KFold
-from sklearn.utils import class_weight
-from itertools import chain
 import argparse
 import math
+
 Dict_3mer_to_100vec={}
 # dim: delimiter
 def get_3mer_and_np100vec_from_a_line(line, dim):
@@ -41,7 +21,7 @@ def get_3mer_and_np100vec_from_a_line(line, dim):
     return three_mer, np100
 
 def LoadPro2Vec():
-    f = open("/home/j00492398/test_joey/interface-pred/Features/protVec_100d_3grams.csv", "r")
+    f = open("feature_computation/Pro2Vec_1D/protVec_100d_3grams.csv", "r")
     while True:
         line = f.readline()
         if not line:
@@ -85,18 +65,18 @@ def load_fasta_and_compute(seq_fn, out_fn, Feature_dict):
     fout.close()
 
 def main():
-    print("start")
+    # print("start")
     LoadPro2Vec()
 
     for key,value in Dict_3mer_to_100vec.items():
         Dict_3mer_to_100vec[key] = np.sum(value)
-    print(Dict_3mer_to_100vec["AAA"])
+    # print(Dict_3mer_to_100vec["AAA"])
     max_key = max(Dict_3mer_to_100vec.keys(), key=(lambda k: Dict_3mer_to_100vec[k]))
     min_key = min(Dict_3mer_to_100vec.keys(), key=(lambda k: Dict_3mer_to_100vec[k]))
     max_value = Dict_3mer_to_100vec[max_key]
     min_value = Dict_3mer_to_100vec[min_key]
-    print(max_value)
-    print(min_value)
+    # print(max_value)
+    # print(min_value)
     for key,value in Dict_3mer_to_100vec.items():
         Dict_3mer_to_100vec[key] = (Dict_3mer_to_100vec[key] - min_value) / (max_value - min_value)
     # print(Dict_3mer_to_100vec["AAA"])
@@ -106,7 +86,7 @@ def main():
     out_fn = sys.argv[2]
     #change the function below so that it loads 3mer
     load_fasta_and_compute(seq_fn, out_fn, Dict_3mer_to_100vec)
-    print("end")
+    # print("end")
 
 if __name__ == '__main__':
     main()
