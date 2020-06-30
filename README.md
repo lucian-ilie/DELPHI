@@ -3,8 +3,11 @@ The DELPHI source code is designed for high-throughput prediction. It does not h
 # Citation
 Yiwei Li, G. Brain Golding, and Lucian Ilie, DELPHI: accurate deep ensemble model for protein interaction sites prediction. under revision
 Contact: 
+
 Yiwei Li (yli922@uwo.ca)
+
 Brain Golding (Golding@mcmaster.ca)
+
 Lucian Ilie (ilie@uwo.ca)
 # system requirement
 DELPHI is developed under Linux environment with python 3.5.
