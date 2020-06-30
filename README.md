@@ -48,3 +48,12 @@ mkdir -p ../programs && cd ../program
  
  - install [ANCHOR](http://anchor.elte.hu/Downloads.php)
  
+# Running DELPHI
+```
+./run_DELPHI.sh [input_sequence]
+```
+
+# DELPHI model architecture 
+![](img/Model_architecture.jpg)
+
+![](img/many_2_one.jpg)
