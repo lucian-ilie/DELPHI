@@ -1,12 +1,12 @@
 # The source code of DELPHI web server
 The DELPHI source code is designed for high-throughput prediction. It does not have the limitation of 10 sequences per run. We recommend to use the [web version](https://www.csd.uwo.ca/~yli922/index.php) of DELPHI if you input is small.
 # Citation
-Yiwei Li, G. Brain Golding, and Lucian Ilie, DELPHI: accurate deep ensemble model for protein interaction sites prediction. under revision
+Yiwei Li, G. Brian Golding, and Lucian Ilie, DELPHI: accurate deep ensemble model for protein interaction sites prediction. under revision
 Contact: 
 
 Yiwei Li (yli922@uwo.ca)
 
-Brain Golding (Golding@mcmaster.ca)
+Brian Golding (Golding@mcmaster.ca)
 
 Lucian Ilie (ilie@uwo.ca)
 # system requirement
