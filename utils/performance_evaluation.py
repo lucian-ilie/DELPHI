@@ -45,6 +45,7 @@ def PlotRocAndPRCurvesAndMetrics(truth, pred, args_prefix, csvPre=""):
     sorted_pred_descending = np.flip(sorted_pred)  # from big to small
     num_of_1 = np.count_nonzero(truth)
     threshold = sorted_pred_descending.item(num_of_1 - 1)
+    print("threshold: ",threshold)
     pred_binary = np.where(pred >= threshold, 1, 0)
     TP, FP, TN, FN, sensitivity, specificity, recall, precision, MCC, F1_score, accuracy = CalculateEvaluationMetrics(truth, pred_binary)
     PrintToCSV(csvPre + args_prefix, au_roc, aupr, TP, FP, TN, FN, sensitivity, specificity, recall, precision, MCC,
@@ -124,8 +125,9 @@ def read_result_file_JianZhang_format(fn, if_append_8_zeros_head_and_tail):
     fin = open(fn)
     lines = fin.readlines()
     for line in lines:
-        val = float(line.rstrip('\n'))
-        values.append(val)
+        if (line[0] != "#"):
+            val = float(line.rstrip('\n').split()[2])
+            values.append(val)
     if (if_append_8_zeros_head_and_tail):
         values.extend([0,0,0,0])
     return  values
@@ -187,8 +189,9 @@ def count_num_of_lines_exclude_end_of_line_in_a_file(fn):
     count = 0
     with open(fn, 'r') as f:
         for line in f:
-            if (line.rstrip('\n').rstrip('\r') != ''):
-                count += 1
+            if (line[0] != "#"):
+                if (line.rstrip('\n').rstrip('\r') != ''):
+                    count += 1
     f.close()
     return  count
 

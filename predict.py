@@ -36,9 +36,14 @@ def Predict(args, test_all_features_np3D):
             print("The input sequence is shorter than 32. ", line_PID)
             exit(1)
         fout = open(args.out_dir+"/"+line_PID.upper()+".txt", "w")
-
+        fout.write("# Prediction results by DELPHI\n")
+        fout.write("# Output columns:\n")
+        fout.write("# Index: the position of the residue in the input sequence, starting from 1\n")
+        fout.write("# Residue: the amino acid residue at the position 'index', represented using 1-letter code\n")
+        fout.write("# DELPHI prediction value: the DELPHI prediction value for the residue at the position 'index'.\n")
+        fout.write("# [Index]\t[Residue]\t[DELPHI prediction value]\n")
         for i in range(len(line_Pseq)):
-            fout.write(str(y_pred_testing[start_index + i]) + "\n")
+            fout.write(str(i + 1) + "\t" + line_Pseq[i] + "\t" + str(y_pred_testing[start_index + i]) + "\n")
         fout.close()
         start_index += len(line_Pseq)
     fin.close()
