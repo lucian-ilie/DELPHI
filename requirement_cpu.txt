@@ -48,4 +48,4 @@ tensorflow-estimator==1.13.0
 tensorflow-tensorboard==1.5.1
 termcolor==1.1.0
 watchdog==0.10.2
-Werkzeug==0.15.2
+Werkzeug==0.15.5
